@@ -9,6 +9,8 @@ The following settings are available:
 ``landmarks_hud_requires_item`` -- If enabled, viewing a waypoint in the hud requires an item in the player inventory
 ``landmarks_hud_item_required`` -- If an item is required, this is the item that is required. Defaults to ``map:mapping_kit``
 ``landmarks_hud_visibility_range`` -- Range at which landmark waypoints are visible in a player's HUD. Defaults to 200m for stone landmarks, five times that for gold landmarks
+``landmarks_gold_landmark_multiplier`` -- Multiply gold landmark ranges by this value. Defaults to 5.
+``landmarks_require_privilege`` -- Require the 'landmarks' privilege to name landmarks. Defaults to false
 
 ## API
 
@@ -31,8 +33,9 @@ An example of API usage:
 		blank_tiles = {stone_texture, stone_texture, stone_texture .. "^(landmarks_blank.png^[colorize:#DDDDDD:128^[multiply:#9E9E9E)"},
 		tiles = {stone_texture, stone_texture, stone_texture .. "^(landmarks_landmark.png^[colorize:#DDDDDD:128^[multiply:#9E9E9E)"},
 		vertical_displacement = 2,
-		node_blank_def_override = {},
-		node_def_override = {},
+		node_blank_def_override = {}, -- Anything in this table will be applied to the blank landmark node's def after all other automatic settings are made. Note that you can break the mod's functionality by replacing the on_rightclick callback.
+		node_def_override = {}, -- As with above, for the marker node. Don't replace the on_destruct callback, it cleans up waypoints when the node is removed.
+		require_privilege = require_privilege, -- If set, this privilege is required to name landmarks of this type
 	})
 	
 ## License

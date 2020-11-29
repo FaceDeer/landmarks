@@ -14,6 +14,7 @@ local visibility_radius = landmark_def.visibility_radius
 
 local description = landmark_def.description
 local vertical_displacement = landmark_def.vertical_displacement or 2
+local require_privilege = landmark_def.require_privilege
 
 local item_required = nil
 if landmark_def.requires_item then
@@ -70,6 +71,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			for _, landmark in pairs(overlapping_waypoints) do
 				minetest.chat_send_player(player_name, S("@1 owned by @2", landmark.data.name, landmark.data.owner))
 			end
+			minetest.chat_send_player(player_name, S("Landmarks of this type must be at least @1m apart.", proximity_radius))
 			player_setting_landmark[player_name] = nil		
 			return
 		end
@@ -80,11 +82,12 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			player_setting_landmark[player_name] = nil
 			return
 		end
-		
-		local simplified_landmark_name =  string.gsub(string.lower(landmark_name), "%s+", "") -- remove whitespace to eliminate simple attempts at spoofing
+
+		local remove_characters = "[%s!.?,;:_]+" -- remove whitespace and punctuation to eliminate simple attempts at spoofing
+		local simplified_landmark_name =  string.gsub(string.lower(landmark_name), remove_characters, "")
 		overlapping_waypoints = named_waypoints.get_waypoints_in_area(base_name, vector.subtract(waypoint_pos, uniqueness_radius), vector.add(waypoint_pos, uniqueness_radius))
 		for _, landmark in pairs(overlapping_waypoints) do
-			if  string.gsub(string.lower(landmark.data.name), "%s+", "") == simplified_landmark_name then
+			if  string.gsub(string.lower(landmark.data.name), remove_characters, "") == simplified_landmark_name then
 				minetest.chat_send_player(player_name, S("There's another landmark of this type within @1m of here with a name similar to @2.", uniqueness_radius, landmark_name))
 				player_setting_landmark[player_name] = nil
 				return
@@ -127,6 +130,11 @@ local blank_def = {
     sounds = {},
     on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
 		if clicker and minetest.is_protected(pos, clicker:get_player_name()) and not minetest.check_player_privs(clicker, "protection_bypass") then
+			minetest.chat_send_player(clicker:get_player_name(), S("This area is protected, you can't name landmarks here."))		
+			return
+		end
+		if require_privilege and not minetest.check_player_privs(clicker, require_privilege) then
+			minetest.chat_send_player(clicker:get_player_name(), S("You need the @1 privilege to name landmarks of this type.", require_privilege))
 			return
 		end
 		set_landmark(pos, clicker)
@@ -188,6 +196,13 @@ end
 local base_proximity_radius = tonumber(minetest.settings:get("landmarks_proximity_exclusion_radius")) or 100
 local base_uniqueness_radius = tonumber(minetest.settings:get("landmarks_uniqueness_exclusion_radius")) or 500
 local base_visibility_radius = tonumber(minetest.settings:get("landmarks_hud_visibility_range")) or 200
+local gold_landmark_multiplier = tonumber(minetest.settings:get("landmarks_gold_landmark_multiplier")) or 5
+
+local require_privilege = nil
+if minetest.settings:get_bool("landmarks_require_privilege", false) then
+	require_privilege = "landmarks"
+	minetest.register_privilege("landmarks", S("Grants the ability to name player-placed landmarks."))
+end
 
 if minetest.get_modpath("default") then
 	local stone_texture = "default_stone_block.png"
@@ -210,14 +225,15 @@ if minetest.get_modpath("default") then
 		vertical_displacement = 2,
 		node_blank_def_override = {},
 		node_def_override = {},
+		require_privilege = require_privilege,
 	})
 	
 	local gold_texture = "default_gold_block.png"
 	landmarks.register_landmark_type("landmarks:gold_landmark", {
-		visibility_radius = base_visibility_radius * 5,
+		visibility_radius = base_visibility_radius * gold_landmark_multiplier,
 		discovery_radius = 20,
-		proximity_radius = base_proximity_radius * 5,
-		uniqueness_radius = base_uniqueness_radius * 5,
+		proximity_radius = base_proximity_radius * gold_landmark_multiplier,
+		uniqueness_radius = base_uniqueness_radius * gold_landmark_multiplier,
 		requires_item = minetest.settings:get_bool("landmarks_hud_requires_item", true),
 		item_required = minetest.settings:get("landmarks_hud_item_required"),
 		recipe = {
@@ -232,6 +248,7 @@ if minetest.get_modpath("default") then
 		vertical_displacement = 2,
 		node_blank_def_override = {},
 		node_def_override = {},
+		require_privilege = require_privilege,
 	})
 
 end

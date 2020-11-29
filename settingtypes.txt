@@ -5,3 +5,5 @@ landmarks_hud_requires_item (Viewing a waypoint in the hud requires an item in t
 #specify "group:groupname" here. Leave it blank to default to map:mapping_kit.
 landmarks_hud_item_required (If an item is required, this is the item that is required) string map:mapping_kit
 landmarks_hud_visibility_range (Range at which landmark waypoints are visible) int 200 0 32000
+landmarks_gold_landmark_multiplier (Multiply gold landmark ranges by this value) float 5.0
+landmarks_require_privilege (Require the 'landmarks' privilege to name landmarks) bool false
