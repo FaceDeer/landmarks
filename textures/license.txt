@@ -1,0 +1,1 @@
+landmarks_blank.png and landmarks_landmark.png are released under the CC0 public domain license.

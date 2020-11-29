@@ -1,7 +1,7 @@
 landmarks_proximity_exclusion_radius (No landmark can be within this many meters of another) int 100 0 32000
-landmarks_uniqueness_exclusion_radius (No landmark within this many meters can have the same name) int 5000 0 32000
+landmarks_uniqueness_exclusion_radius (No landmark within this many meters can have the same name) int 500 0 32000
 landmarks_hud_requires_item (Viewing a waypoint in the hud requires an item in the player inventory) bool true
 #will only be visible in their hud if they have this item in their inventory. You can also
 #specify "group:groupname" here. Leave it blank to default to map:mapping_kit.
 landmarks_hud_item_required (If an item is required, this is the item that is required) string map:mapping_kit
-landmarks_hud_visibility_range (Range at which landmark waypoints are visible) int 250 0 32000
+landmarks_hud_visibility_range (Range at which landmark waypoints are visible) int 200 0 32000
