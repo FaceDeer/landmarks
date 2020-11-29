@@ -1,0 +1,19 @@
+# textdomain: landmarks
+
+
+
+### init.lua ###
+
+@1 owned by @2=
+A Landmark=
+Blank Landmark=
+Landmark=
+Landmark "@1"@nOwned by@2=
+Landmark Name:=
+Landmark set=
+Please specify a landmark name.=
+Set=
+
+There's another landmark within @1m of here already named @2.=
+
+You're too close to the following existing landmarks:=
