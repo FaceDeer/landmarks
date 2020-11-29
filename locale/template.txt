@@ -2,7 +2,7 @@
 
 
 
-### init.lua ###
+### api.lua ###
 
  Players will need to have a @1 in their inventory to see the names of these location markers in their HUDs.=
 
@@ -11,22 +11,31 @@
 @1 owned by @2=
 A Landmark=
 Blank @1=
-Gold Landmark=
 Landmark set=
+Landmarks of this type must be at least @1m apart.=
 
 Place the @1 on the ground and right-click it to carve a location name into it. When a player comes within @2m they will 'discover' it, and will then be able to see the location's name from a distance of up to @3m away.=
 
 Please specify a landmark name.=
 Set=
-Stone Landmark=
 
 There's another landmark of this type within @1m of here with a name similar to @2.=
 
 This @1 has had the name of this location chiseled into it for all to see.=
 
+This area is protected, you can't name landmarks here.=
+
 This is a blank @1 ready to be placed and chiseled with a location's name for all to see.=
 
 When a player comes within @1m they will 'discover' this location and will then be able to see the location's name from a distance of up to @2m away. Only the player who named this location can remove this marker and the corresponding name.=
 
+You need the @1 privilege to name landmarks of this type.=
+
 You're too close to the following existing landmarks of this type:=
 
+
+### init.lua ###
+
+Gold Landmark=
+Grants the ability to name player-placed landmarks.=
+Stone Landmark=
