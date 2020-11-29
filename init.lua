@@ -126,6 +126,9 @@ local blank_def = {
     -- through this node.
     sounds = {},
     on_rightclick = function(pos, node, clicker, itemstack, pointed_thing)
+		if clicker and minetest.is_protected(pos, clicker:get_player_name()) and not minetest.check_player_privs(clicker, "protection_bypass") then
+			return
+		end
 		set_landmark(pos, clicker)
 	end,
 }
